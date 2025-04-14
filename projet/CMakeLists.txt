@@ -5,17 +5,24 @@ set(CMAKE_CXX_STANDARD 23)
 include_directories("libraries/imgui/backends"
         "libraries/imgui"
         "libraries/sdl/include"
+        "libraries/portaudio/include"
 )
 add_executable(projet main.cpp
         MainWindow.cpp
         MainWindow.h
+        AudioGenerator.cpp
+        AudioGenerator.h
         ./libraries/imgui/imgui.cpp
         ./libraries/imgui/imgui_demo.cpp
         ./libraries/imgui/imgui_draw.cpp
         ./libraries/imgui/imgui_widgets.cpp
         ./libraries/imgui/imgui_tables.cpp
         ./libraries/imgui/backends/imgui_impl_sdl3.cpp
-        ./libraries/imgui/backends/imgui_impl_sdlrenderer3.cpp)
+        ./libraries/imgui/backends/imgui_impl_sdlrenderer3.cpp
+        Oscillateurs.cpp
+        Oscillateurs.h
+        Enveloppe.cpp
+        Enveloppe.h)
 if (APPLE)
     set(CMAKE_INSTALL_RPATH
              "${CMAKE_SOURCE_DIR}/../libraries/sdl/lib/macos/SDL3.framework")
@@ -25,11 +32,13 @@ if (APPLE)
 elseif (WIN32)
     target_link_libraries(projet PRIVATE
             "${CMAKE_SOURCE_DIR}/libraries/sdl/lib/win32/sdl3.dll"
+            "${CMAKE_SOURCE_DIR}/libraries/portaudio/lib/win32/portaudio_x64.lib"
     )
     # post-build command to copy the DLLs
     add_custom_command(TARGET projet POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${CMAKE_CURRENT_SOURCE_DIR}/libraries/sdl/lib/win32/sdl3.dll"
+            "${CMAKE_CURRENT_SOURCE_DIR}/libraries/portaudio/lib/win32/portaudio_x64.dll"
             "$<TARGET_FILE_DIR:projet>"
     )
 elseif (UNIX)

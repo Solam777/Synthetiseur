@@ -1,0 +1,71 @@
+
+#include "Enveloppe.h"
+
+Enveloppe::Enveloppe(double sampleRate) :
+
+    _sampleRate(_sampleRate),
+    _state(EnveloppeState::defaultVAl),
+    _attackTime(0.1),
+    _releaseTime(0.1),
+    _currentValue(0.0),
+    _noteOn(false) {calculateIncrements();}
+
+void Enveloppe::calculateIncrements() {
+    _attackKey = 1.0/(_attackTime*_sampleRate);
+    _releaseKey = 1.0/(_releaseTime*_sampleRate);
+}
+
+void Enveloppe::setAttack(double time) {
+    _attackTime = time;
+    calculateIncrements();
+}
+
+void Enveloppe::setRelease(double time) {
+    _releaseTime = time;
+    calculateIncrements();
+}
+
+void Enveloppe::noteOn() {
+    _noteOn = true;
+    _state = EnveloppeState::Attack;
+}
+void Enveloppe::noteOf() {
+    _noteOn = false;
+    _state = EnveloppeState::Release;
+}
+
+double Enveloppe::processus () {
+    switch (_state) {
+        case EnveloppeState::defaultVAl:
+            return 0.0;
+
+        case EnveloppeState::Attack:
+            _currentValue += _attackKey;
+            if (_currentValue >= 1.0) {
+                _currentValue = 1.0;
+                _state = EnveloppeState::Sustain;
+            }
+            return _currentValue;
+
+        case EnveloppeState::Release :
+            _currentValue -= _releaseKey;
+            if (_currentValue <= 0.0) {
+                _currentValue = 0.0;
+                _state = EnveloppeState::defaultVAl;
+            }
+            return _currentValue;
+
+        case EnveloppeState::Sustain :
+            return 1.0;
+
+        default:
+            return 0.0;
+    }
+}
+
+bool Enveloppe::isNoteOn() {
+    return _noteOn;
+}
+
+
+

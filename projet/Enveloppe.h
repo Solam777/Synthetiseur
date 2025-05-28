@@ -9,8 +9,8 @@ public:
     void setAttack(double attack);
     void setRelease(double release);
     void noteOn(); //call attack when an note is playing
-    void noteOf(); //call release when an note is releasing
-    double processus(); // calcul l'amplitute
+    void noteOff(); //call release when an note is releasing
+    double process(); // calcul l'amplitute
     bool isNoteOn();
 
 private:
@@ -18,8 +18,6 @@ private:
     double  _releaseTime; //time of release (seconde)
     double _currentValue; // current value between 0-1
     double _sampleRate; //echantillons d'un song
-
-
     bool _noteOn; //state of note
     double _attackKey; // increment sample during attack
     double _releaseKey; //decrement sample during release
@@ -36,7 +34,5 @@ private:
     EnveloppeState _state;
 
 };
-
-
 
 #endif //ENVELOPPE_H

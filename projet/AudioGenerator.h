@@ -6,16 +6,22 @@
 class AudioGenerator {
 public:
     void init();
-    void cleanup();
+    void cleanup() const;
 
     AudioGenerator();
     Oscillateurs oscillateur;
-
+    void setAttack(double attacktime);
+    void setRelease(double releasetime);
+    void noteOn(int noteIndex);
+    void noteOff();
+    void setOscStates(bool osc1, bool osc2);
+    bool isOsc1Enabled() const { return _osc1Enabled; }
+    bool isOsc2Enabled() const { return _osc2Enabled; }
 
 private:
+    bool _osc1Enabled = true;
+    bool _osc2Enabled = true;
     PaStream *stream = nullptr;  // Maintenant un membre de classe
-
-
     static int audioCallback(const void *inputBuffer,
                              void *outputBuffer,
                              unsigned long framesPerBuffer,

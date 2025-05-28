@@ -5,8 +5,8 @@ Enveloppe::Enveloppe(double sampleRate) :
 
     _sampleRate(_sampleRate),
     _state(EnveloppeState::defaultVAl),
-    _attackTime(0.1),
-    _releaseTime(0.1),
+    _attackTime(0.5),
+    _releaseTime(0.75),
     _currentValue(0.0),
     _noteOn(false) {calculateIncrements();}
 
@@ -29,12 +29,13 @@ void Enveloppe::noteOn() {
     _noteOn = true;
     _state = EnveloppeState::Attack;
 }
-void Enveloppe::noteOf() {
+void Enveloppe::noteOff() {
     _noteOn = false;
     _state = EnveloppeState::Release;
 }
-
-double Enveloppe::processus () {
+// Elle retourne la valeur actuelle de l’enveloppe, qui est entre 0 et 1,
+// et qui est utilisée pour moduler le volume du signal audio
+double Enveloppe::process () {
     switch (_state) {
         case EnveloppeState::defaultVAl:
             return 0.0;
@@ -66,6 +67,8 @@ double Enveloppe::processus () {
 bool Enveloppe::isNoteOn() {
     return _noteOn;
 }
+
+
 
 
 

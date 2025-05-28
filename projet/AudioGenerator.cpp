@@ -1,12 +1,10 @@
 #include <iostream>
 #include "AudioGenerator.h"
 #include "Oscillateurs.h"
-
-
 #include <cmath>
 #include <vector>
 
-constexpr int FRAMES_PER_BUFFER {256};
+constexpr int FRAMES_PER_BUFFER {1024};
 constexpr int SAMPLE_RATE {44100};
 
 void AudioGenerator::init() {
@@ -45,7 +43,7 @@ void AudioGenerator::init() {
     }
 }
 
-void AudioGenerator::cleanup() {
+void AudioGenerator::cleanup() const {
     if (stream) {
         Pa_StopStream(stream);
         Pa_CloseStream(stream);
@@ -71,7 +69,8 @@ int AudioGenerator::audioCallback(const void *inputBuffer,
     std::vector<float> buffer;
 
     // Remplir le buffer avec les données de l'oscillateur
-    audio->oscillateur.fillBuffer(buffer, framesPerBuffer);
+    audio->oscillateur.fillBuffer(buffer, framesPerBuffer,audio->isOsc1Enabled(),
+                              audio->isOsc2Enabled());
 
     // Copier les données du buffer dans outputBuffer
     for (unsigned int i = 0; i < framesPerBuffer * 2; i++) {
@@ -80,3 +79,28 @@ int AudioGenerator::audioCallback(const void *inputBuffer,
 
     return paContinue;
 }
+
+void AudioGenerator::noteOn(int noteIndex) {
+    double freq = 220.0 * std::pow(2.0, noteIndex / 12.0); // formule de conversion note → fréquence
+    oscillateur.SetFrequency(freq);
+    oscillateur.SetIsActive(true);
+    oscillateur.noteOn();
+}
+
+void AudioGenerator::noteOff() {
+    oscillateur.noteOff();
+}
+
+void AudioGenerator::setAttack(double time) {
+    oscillateur.setAttack(time); // ajoute cette méthode dans Oscillateurs si absente
+}
+
+void AudioGenerator::setRelease(double time) {
+    oscillateur.setRelease(time);
+}
+
+void AudioGenerator::setOscStates(bool osc1, bool osc2) {
+    _osc1Enabled = osc1;
+    _osc2Enabled = osc2;
+}
+

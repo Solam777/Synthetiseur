@@ -22,7 +22,11 @@ add_executable(projet main.cpp
         Oscillateurs.cpp
         Oscillateurs.h
         Enveloppe.cpp
-        Enveloppe.h)
+        Enveloppe.h
+        Filtre.cpp
+        Filtre.h
+        Delay.cpp
+        Delay.h)
 if (APPLE)
     set(CMAKE_INSTALL_RPATH
              "${CMAKE_SOURCE_DIR}/../libraries/sdl/lib/macos/SDL3.framework")

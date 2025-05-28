@@ -5,7 +5,7 @@
 #ifndef OSCILLATEURS_H
 #define OSCILLATEURS_H
 #include <vector>
-
+#include "Filtre.h"
 #include "Enveloppe.h"
 
 enum class WaveForm { // different form
@@ -28,7 +28,7 @@ private:
     float generateSquare();
     float generateSaw();
     Enveloppe _enveloppe;
-
+    Filtre _filtre;
 
 
 public:
@@ -42,9 +42,14 @@ public:
     double getFrequencyActual();
     // buffer: table where were store some samples audio
     // frameCount: number de frames to generate
-    void fillBuffer(std::vector<float>& buffer , int frame );
+    void fillBuffer(std::vector<float>& buffer , int frame, bool osc1Enable, bool osc2Enable);
     void noteOn();
-    void noteOf();
+    void noteOff();
+    void setAttack(double time);
+    void setRelease(double time);
+    void setCutoff(double c);
+    void setResonance(double r);
+
 };
 
 

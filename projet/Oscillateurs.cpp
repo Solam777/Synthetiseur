@@ -14,8 +14,11 @@ Oscillateurs::Oscillateurs(double sampleRate) :
     _isActive(true),
     _wave_form(WaveForm::Sine),
     _enveloppe(sampleRate),
-    _filtre(sampleRate)
+    _filtre(sampleRate),
+    _delay(sampleRate, 2.0f)
 {
+    _delay.setDelayTime(0.5f); // demi-seconde
+    _delay.setMix(0.4f);       // 40% delay
 
 }
 
@@ -109,21 +112,28 @@ void Oscillateurs::fillBuffer(std::vector<float>& buffer, int frame,bool osc1Ena
         sample = _filtre.process(sample, 0);  // canal gauche
         float sampleR = _filtre.process(sample, 1);  // canal droit
 
+        sample = _delay.process(sample);     // canal gauche avec delay
+        sampleR = _delay.process(sampleR);   // canal droit avec delay
+
 
         // évite de désactiver tout si OSC2 est toujours active
         if (env <= 0.0  && !_enveloppe.isNoteOn() && !osc2Enable) {
             _isActive = false;
         }
-
         buffer.at(i*2) = sample; // left osc1
         buffer.at(i*2 +1 ) = sampleR; //right osc1
 
         _phase += phaseStep;
+
+
         // between 0 and 2pi
         while (_phase >= 2.0 * M_PI) {
             _phase -= 2.0 * M_PI;
         }
+
+
     }
+
 }
 
 void Oscillateurs::setAttack(double time) {
@@ -140,6 +150,21 @@ void Oscillateurs::setCutoff(double c) {
 void Oscillateurs::setResonance(double r) {
     _filtre.setResonance(r);
 }
+
+void Oscillateurs::setDelayTime(float time) {
+    _delay.setDelayTime(time);
+}
+
+void Oscillateurs::setDelayMix(float mix) {
+    _delay.setMix(mix);
+
+}
+
+bool Oscillateurs::isNoteOn() {
+    return _enveloppe.isNoteOn(); // ou un bool local
+
+}
+
 
 
 

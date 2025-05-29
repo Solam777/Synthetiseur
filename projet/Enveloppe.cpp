@@ -1,9 +1,12 @@
 
 #include "Enveloppe.h"
 
+#include <iostream>
+#include <ostream>
+
 Enveloppe::Enveloppe(double sampleRate) :
 
-    _sampleRate(_sampleRate),
+    _sampleRate(sampleRate),
     _state(EnveloppeState::defaultVAl),
     _attackTime(0.5),
     _releaseTime(0.75),
@@ -18,18 +21,26 @@ void Enveloppe::calculateIncrements() {
 void Enveloppe::setAttack(double time) {
     _attackTime = time;
     calculateIncrements();
+
+
 }
 
 void Enveloppe::setRelease(double time) {
     _releaseTime = time;
     calculateIncrements();
+
 }
 
 void Enveloppe::noteOn() {
+    if (_state == EnveloppeState::Attack || _state == EnveloppeState::Sustain) {
+        // Ne redémarre pas si l’enveloppe est déjà en montée ou maintenue
+        return;
+    }
     _noteOn = true;
     _state = EnveloppeState::Attack;
 }
 void Enveloppe::noteOff() {
+
     _noteOn = false;
     _state = EnveloppeState::Release;
 }

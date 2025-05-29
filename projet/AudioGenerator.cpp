@@ -81,13 +81,22 @@ int AudioGenerator::audioCallback(const void *inputBuffer,
 }
 
 void AudioGenerator::noteOn(int noteIndex) {
-    double freq = 220.0 * std::pow(2.0, noteIndex / 12.0); // formule de conversion note → fréquence
+    if (noteIndex == _lastNoteIndex && oscillateur.isActive()) {
+        // Même note déjà active → ne redémarre pas
+        return;
+    }
+
+    _lastNoteIndex = noteIndex;
+
+    double freq = 220.0 * std::pow(2.0, noteIndex / 12.0); // conversion note -> freq
     oscillateur.SetFrequency(freq);
     oscillateur.SetIsActive(true);
-    oscillateur.noteOn();
+    oscillateur.noteOn();  // démarre l'enveloppe seulement si nouvelle note
 }
 
+
 void AudioGenerator::noteOff() {
+    _lastNoteIndex = -1;
     oscillateur.noteOff();
 }
 
@@ -102,5 +111,8 @@ void AudioGenerator::setRelease(double time) {
 void AudioGenerator::setOscStates(bool osc1, bool osc2) {
     _osc1Enabled = osc1;
     _osc2Enabled = osc2;
+}
+int AudioGenerator::getLastNoteIndex() const {
+    return _lastNoteIndex;
 }
 

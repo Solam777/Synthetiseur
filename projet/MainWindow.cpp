@@ -132,7 +132,9 @@ void MainWindow::run() {
             if (event.type == SDL_EVENT_KEY_UP) {
                 auto it = keyToNote.find(event.key.scancode);
                 if (it != keyToNote.end()) {
-                    audio.noteOff();
+                    if (it->second == audio.getLastNoteIndex()) {
+                        audio.noteOff(); // n'appelle noteOff que pour la note active
+                    }
                 }
             }
 
@@ -204,7 +206,7 @@ void MainWindow::draw() {
 
 
     // Attack
-    if (ImGui::SliderFloat("Attack", &attack, 0, 2)) {
+    if (ImGui::SliderFloat("Attack", &attack, 0, 1)) {
         audio.setAttack(attack);
     }
 
@@ -223,7 +225,15 @@ void MainWindow::draw() {
         audio.oscillateur.setResonance(FilterResonance);
     }
 
-    ImGui::SliderFloat("DelayTime", &DelayTime, 0.1, 2);
+    //delay
+    if (ImGui::SliderFloat("DelayTime", &DelayTime, 0.1, 2)) {
+        audio.oscillateur.setDelayTime(DelayTime);
+    }
+
+    //delaymix
+    if (ImGui::SliderFloat("DelayMix", &DelayMix, 0, 1)) {
+        audio.oscillateur.setDelayMix(DelayMix);
+    }
 
     // Espacement
     ImGui::Spacing();
@@ -234,14 +244,14 @@ void MainWindow::draw() {
     float buttonWidth = 40.0f;
     float spacing = 10.0f;
 
-    for (int i = 0; i < 12 ; i++) {
+    for (int i = 0; i < 13 ; i++) {
         // Bouton de note
         if (ImGui::Button(std::to_string(i + 1).c_str(), ImVec2(buttonWidth, 0))) {
             // Tu peux garder ça si tu veux une réaction immédiate au clic
             audio.noteOn(i);
         }
 
-        // Début de clic => début de note
+        // Début de clic début de note
         if (ImGui::IsItemActivated()) {
             audio.noteOn(i);
         }
@@ -251,9 +261,7 @@ void MainWindow::draw() {
             audio.noteOff();
         }
 
-        if (i < 11) ImGui::SameLine(0, spacing);
+        if (i < 12) ImGui::SameLine(0, spacing);
     }
-
-
     ImGui::End();
 }

@@ -14,6 +14,7 @@ private:
 
     SDL_Window* window { nullptr };
     SDL_Renderer* renderer { nullptr };
+    void handleNoteChange(int newNote);
 
     AudioGenerator audio;
 };

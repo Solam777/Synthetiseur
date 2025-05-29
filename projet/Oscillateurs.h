@@ -5,6 +5,8 @@
 #ifndef OSCILLATEURS_H
 #define OSCILLATEURS_H
 #include <vector>
+
+#include "Delay.h"
 #include "Filtre.h"
 #include "Enveloppe.h"
 
@@ -29,6 +31,7 @@ private:
     float generateSaw();
     Enveloppe _enveloppe;
     Filtre _filtre;
+    Delay _delay;
 
 
 public:
@@ -49,7 +52,10 @@ public:
     void setRelease(double time);
     void setCutoff(double c);
     void setResonance(double r);
+    void setDelayTime(float time);
+    void setDelayMix(float mix);
 
+    bool isNoteOn();
 };
 
 

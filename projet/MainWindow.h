@@ -3,7 +3,8 @@
 #define TESTINSTRUCT_MAINWINDOW_H
 
 #include <SDL3/SDL.h>
-#include "AudioGenerator.h"
+#include "Audio/AudioGenerator.h"
+
 class MainWindow {
 public :
     void init();

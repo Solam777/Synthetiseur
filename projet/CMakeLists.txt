@@ -10,8 +10,8 @@ include_directories("libraries/imgui/backends"
 add_executable(projet main.cpp
         MainWindow.cpp
         MainWindow.h
-        AudioGenerator.cpp
-        AudioGenerator.h
+        Audio/AudioGenerator.cpp
+        Audio/AudioGenerator.h
         ./libraries/imgui/imgui.cpp
         ./libraries/imgui/imgui_demo.cpp
         ./libraries/imgui/imgui_draw.cpp
@@ -19,14 +19,14 @@ add_executable(projet main.cpp
         ./libraries/imgui/imgui_tables.cpp
         ./libraries/imgui/backends/imgui_impl_sdl3.cpp
         ./libraries/imgui/backends/imgui_impl_sdlrenderer3.cpp
-        Oscillateurs.cpp
-        Oscillateurs.h
-        Enveloppe.cpp
-        Enveloppe.h
-        Filtre.cpp
-        Filtre.h
-        Delay.cpp
-        Delay.h)
+        Audio/Oscillateurs.cpp
+        Audio/Oscillateurs.h
+        Audio/Enveloppe.cpp
+        Audio/Enveloppe.h
+        Audio/Filtre.cpp
+        Audio/Filtre.h
+        Audio/Delay.cpp
+        Audio/Delay.h)
 if (APPLE)
     set(CMAKE_INSTALL_RPATH
              "${CMAKE_SOURCE_DIR}/../libraries/sdl/lib/macos/SDL3.framework")

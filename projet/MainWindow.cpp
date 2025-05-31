@@ -244,7 +244,7 @@ void MainWindow::draw() {
     float buttonWidth = 40.0f;
     float spacing = 10.0f;
 
-    for (int i = 0; i < 13 ; i++) {
+    for (int i = 0; i < 12 ; i++) {
         // Bouton de note
         if (ImGui::Button(std::to_string(i + 1).c_str(), ImVec2(buttonWidth, 0))) {
             // Tu peux garder ça si tu veux une réaction immédiate au clic

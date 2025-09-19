@@ -46,8 +46,4 @@ Il repose sur les principes de la **synthèse soustractive** et permet de géné
 - [PortAudio](http://www.portaudio.com/) – gestion audio cross-plateforme  
 - **C++23** – langage principal  
 
----
 
-
-   git clone https://github.com/Solam777/Oxono.git
-   cd Oxono
